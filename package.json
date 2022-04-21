@@ -1,0 +1,28 @@
+{
+  "name": "keeper",
+  "version": "1.0.0",
+  "description": "A most eliquant Slack bot for Dev ICT",
+  "main": "./bin/service.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "start": "DOTENV_CONFIG_PATH=./.env CONF_FILE=main nodemon ./bin/service.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/.bin/tsc --project ./tsconfig.json"
+  },
+  "author": "Kaleb Mills",
+  "license": "ISC",
+  "dependencies": {
+    "@slack/bolt": "^3.11.0",
+    "dotenv": "^16.0.0",
+    "nodemon": "^2.0.15",
+    "pino": "^7.10.0",
+    "pino-pretty": "^7.6.1"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.23",
+    "typescript": "^4.6.3"
+  }
+}

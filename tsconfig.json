@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "lib": ["ES6"],
+    "strict": true,
+    "esModuleInterop": true,
+    "types": ["@types/node"],
+    "moduleResolution": "node",
+    "allowJs": true,
+    "rootDirs": ["./bin", "./conf", "./lib", "./test"],
+    // "outDir": "./dist"
+  },
+  "include": ["lib/**/*.ts", "test/**/*.ts", "bin/**/*.ts"],
+  "exclude": ["node_modules"]
+}
