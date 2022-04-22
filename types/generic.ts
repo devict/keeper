@@ -12,7 +12,7 @@ export interface BaseOptions {
     logger: Logger;
 }
 
-export interface Client extends Startable, Stoppable {};
+export interface Client extends Startable, Stoppable { };
 
 export type HandlerBody<Command = any, Client = any> = { command: Command, client: Client, logger: Function }
 
