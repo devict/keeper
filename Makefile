@@ -3,8 +3,10 @@ build:
 
 build-dev-workspace:
 	@cp .env.default .env
-	@echo "Populate the required values in the new .env file!"
+	@$(MAKE) compile
+	@echo "Populate the required values in the new .env file! If you are using the local config file, then no need!"
 
+.PHONY: compile
 compile:
 	@npm run build
 dev:
