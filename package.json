@@ -8,11 +8,15 @@
     "test": "test"
   },
   "scripts": {
-    "start": "DOTENV_CONFIG_PATH=./.env nodemon ./bin/service.js",
+    "start": "DOTENV_CONFIG_PATH=./.env nodemon ./dist/bin/service.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "./node_modules/.bin/tsc --project ./tsconfig.json"
   },
   "author": "Kaleb Mills",
+  "contributors": [
+    "Kaleb Mills",
+    "Seth Etter"
+  ],
   "license": "ISC",
   "dependencies": {
     "@slack/bolt": "^3.11.0",
