@@ -1,26 +1,25 @@
 import { Client } from '../types/generic'
+import { Logger } from '../types/logger'
 import { ServiceOptions } from '../types/service'
 
 class Service implements Client {
     private clients: Client[];
+    private logger: Logger;
 
     constructor(options: ServiceOptions) {
         this.clients = options.clients;
+        this.logger = options.logger;
     }
 
 
-    start = (): Promise<void> => {
-        return Promise.all(this.clients.map(client => client.start()))
-        .then(() => {
-            console.log(`Started ${this.constructor.name}#SUCCESS`)
-        });
+    start = async (): Promise<void> => {
+        await Promise.all(this.clients.map(client => client.start()));
+        this.logger.log(`Started ${this.constructor.name}#SUCCESS`);
     }
 
-    stop = (): Promise<void> => {
-        return Promise.all(this.clients.map(client => client.stop()))
-        .then(() => {
-            console.log(`Stopped ${this.constructor.name}`)
-        });
+    stop = async (): Promise<void> => {
+        await Promise.all(this.clients.map(client => client.stop()));
+        this.logger.log(`Stopped ${this.constructor.name}`);
     }
 }
 

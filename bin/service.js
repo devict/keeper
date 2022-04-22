@@ -10,5 +10,5 @@ const service_1 = __importDefault(require("../lib/service"));
 const serviceOptions = require(`../conf/${(0, env_1.getEnv)(env_1.ENV.CONF_FILE)}.js`);
 const service = new service_1.default(serviceOptions);
 service.start().then(() => {
-    console.log(`[Keeper]: Started Keeper!`);
+    serviceOptions.logger.log(`[Keeper]: Started Keeper!`);
 });

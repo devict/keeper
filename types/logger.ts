@@ -9,6 +9,7 @@ export enum LogLevel {
 
 export interface Logger {
     log(message: string | object, level?: LogLevel): void;
+    error(message: string | object): void;
 }
 
 export interface LoggerOptions {

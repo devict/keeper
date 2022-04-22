@@ -4,7 +4,7 @@ import { Logger as LoggerInterface, LoggerOptions, LogLevel } from '../types/log
 class Logger implements LoggerInterface {
     private _client: pino.BaseLogger;
 
-    constructor (options: LoggerOptions) {
+    constructor(options: LoggerOptions) {
         this._client = pino({
             name: options.name,
             transport: {
@@ -18,6 +18,10 @@ class Logger implements LoggerInterface {
 
     log(message: string | object, level?: LogLevel): void {
         return this._client[level || LogLevel.TRACE](message);
+    }
+
+    error(message: string): void {
+        return this._client[LogLevel.ERROR](message);
     }
 }
 

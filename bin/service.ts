@@ -10,5 +10,5 @@ const serviceOptions: ServiceOptions = require(`../conf/${getEnv(ENV.CONF_FILE)}
 const service = new Service(serviceOptions)
 
 service.start().then(() => {
-    console.log(`[Keeper]: Started Keeper!`)
+    serviceOptions.logger.log(`[Keeper]: Started Keeper!`)
 })
