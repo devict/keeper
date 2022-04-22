@@ -6,4 +6,4 @@ COPY . /app
 
 RUN npm install --production
 
-CMD ["node", "./bin/service.js"]
+CMD ["node", "./dist/bin/service.js"]

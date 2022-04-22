@@ -8,9 +8,9 @@
     "types": ["@types/node"],
     "moduleResolution": "node",
     "allowJs": true,
-    "rootDirs": ["./bin", "./conf", "./lib", "./test"],
-    // "outDir": "./dist"
+    "rootDir": "./src",
+    "outDir": "./dist"
   },
-  "include": ["lib/**/*.ts", "test/**/*.ts", "bin/**/*.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
 }
