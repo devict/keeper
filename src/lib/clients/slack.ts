@@ -2,8 +2,6 @@ import { App } from '@slack/bolt';
 import { CommandClient, Handler } from '../../types/generic';
 import { Logger } from '../../types/logger';
 import { SlackClientOptions } from '../../types/clients/slack'
-import { noop } from '../util'
-
 
 class SlackClient implements CommandClient<SlackClient> {
     private port: number;
@@ -21,14 +19,13 @@ class SlackClient implements CommandClient<SlackClient> {
         this.port = options.port;
     }
 
-    start(): Promise<void> {
-        return this._client
-            .start(this.port)
-            .then(this.attachDefaultHandler)
+    async start(): Promise<void> {
+        await this._client.start(this.port);
+        this.attachDefaultHandler;
     }
 
-    stop(): Promise<void> {
-        return this._client.stop().then(noop)
+    async stop(): Promise<void> {
+        await this._client.stop()
     }
 
     registerCommand(command: string, handler: Handler): SlackClient {

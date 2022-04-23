@@ -1,21 +1,31 @@
-import { BaseOptions } from "../../types/generic";
-import { Client } from "../../types/generic";
+import { BaseOptions, Handler } from '../../types/generic';
+import { CommandClient } from '../../types/generic';
 import { Logger } from '../../types/logger'
 
-export default class PhonyClient implements Client {
+export default class PhonyClient implements CommandClient<PhonyClient> {
     private logger: Logger;
+    private handlers: Map<string, Handler>;
 
-    constructor (options: BaseOptions) {
+    constructor(options: BaseOptions) {
         this.logger = options.logger;
+        this.handlers = new Map();
     }
 
-    start(): Promise<void> {
+    async start(): Promise<void> {
+        // TODO: start listening on stdin somewhere? or an http port?
         this.logger.log(`${this.constructor.name}.start():SUCCESS`)
-        return Promise.resolve();
     }
 
-    stop(): Promise<void> {
+    async stop(): Promise<void> {
         this.logger.log(`${this.constructor.name}.stop():SUCCESS`)
-        return Promise.resolve();
+    }
+
+    registerCommand(command: string, handler: Handler): PhonyClient {
+        this.handlers.set(command, handler);
+        return this;
+    }
+
+    registerEventHandler(eventName: string, handler: Handler): void {
+        this.handlers.set(eventName, handler);
     }
 }
