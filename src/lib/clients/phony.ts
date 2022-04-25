@@ -1,14 +1,14 @@
 import { BaseOptions, Handler } from '../../types/generic';
 import { CommandClient } from '../../types/generic';
 import { Logger } from '../../types/logger'
+import { EventEmitter } from 'events';
 
-export default class PhonyClient implements CommandClient<PhonyClient> {
+export default class PhonyClient extends EventEmitter implements CommandClient<PhonyClient> {
     private logger: Logger;
-    private handlers: Map<string, Handler>;
 
     constructor(options: BaseOptions) {
+        super();
         this.logger = options.logger;
-        this.handlers = new Map();
     }
 
     async start(): Promise<void> {
@@ -21,11 +21,11 @@ export default class PhonyClient implements CommandClient<PhonyClient> {
     }
 
     registerCommand(command: string, handler: Handler): PhonyClient {
-        this.handlers.set(command, handler);
+        this.on(command, handler);
         return this;
     }
 
     registerEventHandler(eventName: string, handler: Handler): void {
-        this.handlers.set(eventName, handler);
+        this.on(eventName, handler);
     }
 }
