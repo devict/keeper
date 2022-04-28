@@ -18,7 +18,7 @@ class KeeperClient implements CommandClient<KeeperClient> {
 
     start = async (): Promise<void> => {
         await this.slackClient.start();
-        this.addDefaultCommandHandlers;
+        this.addDefaultCommandHandlers();
         this.logger.log(`Started ${this.constructor.name}#start():SUCCESS`);
     }
 
