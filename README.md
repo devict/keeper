@@ -1,5 +1,6 @@
 # Keeper
 
+The [devICT](https://devict.org) community Slack bot!
 
 ### Development
 
@@ -24,6 +25,7 @@ Now you can add commands to Keeper in `lib/handlers/keeper.ts`!
 3. Type commands and see responses! Try `hello` and you should see `keeper: hello, Human!` in response
 
 #### Docker
+
 **NOTE** As of now, there is no way to develop locally in docker.
 
 To run your local build, run `make build`, then `make start`.
