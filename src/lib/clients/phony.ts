@@ -3,16 +3,14 @@ import { SayArguments } from "@slack/bolt";
 import { KeeperSlackMiddleware } from "../../types/clients/keeper"
 import { CommandClient, Command } from '../../types/generic';
 import { Logger } from '../../types/logger'
-import { EventEmitter } from 'events';
 import * as net from 'net';
 
-export default class PhonyClient extends EventEmitter implements CommandClient<PhonyClient> {
+export default class PhonyClient implements CommandClient<PhonyClient> {
     private logger: Logger;
     private server: net.Server;
     private commands: Command<KeeperSlackMiddleware, this>[];
 
     constructor(options: BaseOptions) {
-        super();
         this.commands = [];
         this.logger = options.logger;
         this.server = net.createServer(c => {
