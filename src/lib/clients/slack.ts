@@ -1,5 +1,5 @@
 import { App } from '@slack/bolt';
-import { CommandClient, Handler } from '../../types/generic';
+import { CommandClient, Handler, Command } from '../../types/generic';
 import { Logger } from '../../types/logger';
 import { SlackClientOptions } from '../../types/clients/slack'
 
@@ -7,6 +7,7 @@ class SlackClient implements CommandClient<SlackClient> {
     private port: number;
     private logger: Logger;
     private _client: App;
+    private commands: Command[];
 
     constructor(options: SlackClientOptions) {
         this._client = new App({
@@ -15,6 +16,7 @@ class SlackClient implements CommandClient<SlackClient> {
             socketMode: true,
             appToken: options.appToken
         });
+        this.commands = [];
         this.logger = options.logger;
         this.port = options.port;
     }
@@ -28,16 +30,22 @@ class SlackClient implements CommandClient<SlackClient> {
         await this._client.stop()
     }
 
-    registerCommand(command: string, handler: Handler): SlackClient {
-        this._client.command(command, args => handler({ command: args, client: this, logger: this.logger.log }));
+    registerCommand({ matches, handler }: Command): SlackClient {
+        this.commands.push({ matches, handler });
         return this;
     }
 
-    registerEventHandler(eventName: string, handler: Handler): void {
-        this._client.event(eventName, args => handler({ client: this, command: args, logger: this.logger.log }));
-    }
-
     private attachDefaultHandler = () => {
+        this._client.event("app_mention", async (args) => {
+            await Promise.all(this.commands.filter(({ matches }) => {
+                switch (typeof matches) {
+                    case "object": return matches.test(args.message);
+                    case "string": return matches == args.message;
+                }
+            }).map(({ handler }) => {
+                return handler({ client: this, command: args, logger: this.logger.log })
+            }));
+        });
         this._client.error((error: Error) => {
             this.logger.error(error)
             return Promise.resolve();

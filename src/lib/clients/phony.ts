@@ -1,5 +1,7 @@
-import { BaseOptions, Handler } from '../../types/generic';
-import { CommandClient } from '../../types/generic';
+import { BaseOptions, HandlerBody } from '../../types/generic';
+import { SayArguments } from "@slack/bolt";
+import { KeeperSlackMiddleware } from "../../types/clients/keeper"
+import { CommandClient, Command } from '../../types/generic';
 import { Logger } from '../../types/logger'
 import { EventEmitter } from 'events';
 import * as net from 'net';
@@ -7,30 +9,45 @@ import * as net from 'net';
 export default class PhonyClient extends EventEmitter implements CommandClient<PhonyClient> {
     private logger: Logger;
     private server: net.Server;
-    private handlers: Map<string, Handler>;
+    private commands: Command<KeeperSlackMiddleware, this>[];
 
     constructor(options: BaseOptions) {
         super();
-        this.handlers = new Map();
+        this.commands = [];
         this.logger = options.logger;
         this.server = net.createServer(c => {
             c.on('connect', () => this.logger.log('tcp connection opened'));
             c.on('end', () => this.logger.log('tcp connection closed'));
-            c.on('data', data => {
-                const handler = this.handlers.get(data.toString().trim());
-                if (handler) handler(this.handlerArgs(c));
+
+            c.on('data', async (data) => {
+                const msg = data.toString().trim();
+
+                await Promise.all(this.commands.filter(({ matches }) => {
+                    switch (typeof matches) {
+                        case "object": return matches.test(msg);
+                        case "string": return matches == msg;
+                    }
+                }).map(({ handler }) => {
+                    return handler(this.handlerArgs(c, msg))
+                }));
             });
         });
     }
 
-    handlerArgs(c: net.Socket) {
+    handlerArgs(c: net.Socket, text: string): HandlerBody<KeeperSlackMiddleware, this> {
         return {
             client: this,
             logger: this.logger.log,
             command: {
-                ack: (): Promise<void> => Promise.resolve(),
-                respond: async (resp: String): Promise<void> => {
-                    c.write(Buffer.from(resp));
+                say: async (args: string | SayArguments) => {
+                    const text = typeof args === "string" ? args : args.text;
+                    c.write(`keeper: ${text}\n`);
+                    return { ok: true };
+                },
+                payload: {
+                    channel: "#local",
+                    username: "Human",
+                    text,
                 },
             },
         }
@@ -45,12 +62,8 @@ export default class PhonyClient extends EventEmitter implements CommandClient<P
         this.logger.log(`${this.constructor.name}.stop():SUCCESS`)
     }
 
-    registerCommand(command: string, handler: Handler): PhonyClient {
-        this.handlers.set(command, handler);
+    registerCommand({ matches, handler }: Command): PhonyClient {
+        this.commands.push({ matches, handler });
         return this;
-    }
-
-    registerEventHandler(eventName: string, handler: Handler): void {
-        this.handlers.set(eventName, handler);
     }
 }

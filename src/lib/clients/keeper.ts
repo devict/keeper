@@ -1,4 +1,4 @@
-import { CommandClient, Handler } from '../../types/generic';
+import { CommandClient, Command } from '../../types/generic';
 import { KeeperClientOptions, KeeperSlackMiddleware } from '../../types/clients/keeper'
 import KeeperCommandHandlerMap from '../handlers/keeper';
 import SlackClient from './slack';
@@ -8,7 +8,7 @@ import { Logger } from '../../types/logger';
 class KeeperClient implements CommandClient<KeeperClient> {
     private logger: Logger;
     private slackClient: CommandClient<SlackClient | PhonyClient>;
-    private slackCommandHandlers: { [command: string]: Handler<KeeperSlackMiddleware> }
+    private slackCommandHandlers: Command<KeeperSlackMiddleware, this>[];
 
     constructor(options: KeeperClientOptions) {
         this.logger = options.logger;
@@ -26,16 +26,14 @@ class KeeperClient implements CommandClient<KeeperClient> {
         await this.slackClient.stop();
     }
 
-    registerCommand(command: string, handler: Handler<any>): KeeperClient {
-        this.slackCommandHandlers[command] = handler;
-        this.slackClient.registerCommand(command, handler);
-
+    registerCommand({ matches, handler }: Command): KeeperClient {
+        this.slackCommandHandlers.push({ matches, handler });
         return this;
     }
 
     private addDefaultCommandHandlers = () => {
-        Object.keys(this.slackCommandHandlers).forEach(command => {
-            this.slackClient.registerCommand(command, this.slackCommandHandlers[command]);
+        this.slackCommandHandlers.forEach(command => {
+            this.slackClient.registerCommand(command);
         });
     }
 }
