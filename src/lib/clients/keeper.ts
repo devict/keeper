@@ -26,8 +26,8 @@ class KeeperClient implements CommandClient<KeeperClient> {
         await this.slackClient.stop();
     }
 
-    registerCommand({ matches, handler }: Command): KeeperClient {
-        this.slackCommandHandlers.push({ matches, handler });
+    registerCommand(command: Command): KeeperClient {
+        this.slackCommandHandlers.push(command);
         return this;
     }
 
