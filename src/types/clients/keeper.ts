@@ -7,9 +7,13 @@ export interface KeeperClientOptions extends BaseOptions {
 
 // This is the type fed into the keeper handlers. If you need more data from
 // the Slack client, you can add those properties here, and will need to account for
-// them in the PhonyClient as well.
-export type AppMentionEvent = Pick<
-    SlackEventMiddlewareArgs<'app_mention'>, 'say'
-> & { payload: Pick<SlackEventMiddlewareArgs<'app_mention'>['payload'], 'channel' | 'username' | 'text'> };
+// them in the PhonySlackClient as well.
+export type AppMentionEvent = {
+    say: SlackEventMiddlewareArgs<'app_mention'>['say'],
+    payload: Pick<
+        SlackEventMiddlewareArgs<'app_mention'>['payload'],
+        'channel' | 'username' | 'text'
+    >
+};
 
 export type KeeperSlackMiddleware = AppMentionEvent;
