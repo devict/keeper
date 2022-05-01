@@ -4,6 +4,7 @@ import { KeeperSlackMiddleware } from "../../types/clients/keeper"
 import { CommandClient, Command } from '../../types/generic';
 import { Logger } from '../../types/logger'
 import * as net from 'net';
+import { promisify } from 'util';
 
 export default class PhonyClient implements CommandClient<PhonyClient> {
     private logger: Logger;
@@ -57,6 +58,7 @@ export default class PhonyClient implements CommandClient<PhonyClient> {
     }
 
     async stop(): Promise<void> {
+        await promisify(this.server.close)();
         this.logger.log(`${this.constructor.name}.stop():SUCCESS`)
     }
 
