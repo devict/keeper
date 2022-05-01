@@ -23,6 +23,6 @@ export interface Command<Command = any, Client = any> {
     handler: Handler<Command, Client>;
 }
 
-export interface CommandClient<T> extends Client {
-    registerCommand(command: Command): T;
+export interface CommandClient extends Client {
+    registerCommand(command: Command): CommandClient;
 };

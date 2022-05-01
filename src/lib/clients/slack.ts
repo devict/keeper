@@ -1,9 +1,9 @@
 import { App } from '@slack/bolt';
-import { CommandClient, Handler, Command } from '../../types/generic';
+import { CommandClient, Command } from '../../types/generic';
 import { Logger } from '../../types/logger';
 import { SlackClientOptions } from '../../types/clients/slack'
 
-class SlackClient implements CommandClient<SlackClient> {
+class SlackClient implements CommandClient {
     private port: number;
     private logger: Logger;
     private _client: App;

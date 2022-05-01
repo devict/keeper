@@ -6,7 +6,7 @@ import { Logger } from '../../types/logger'
 import * as net from 'net';
 import { promisify } from 'util';
 
-export default class PhonyClient implements CommandClient<PhonyClient> {
+export default class PhonyClient implements CommandClient {
     private logger: Logger;
     private server: net.Server;
     private commands: Command<KeeperSlackMiddleware, this>[];

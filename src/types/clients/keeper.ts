@@ -1,10 +1,8 @@
 import { SlackEventMiddlewareArgs } from "@slack/bolt";
-import SlackClient from "../../lib/clients/slack";
-import PhonyClient from "../../lib/clients/phony";
 import { BaseOptions, CommandClient } from "../generic";
 
 export interface KeeperClientOptions extends BaseOptions {
-    slackClient: CommandClient<SlackClient | PhonyClient>;
+    slackClient: CommandClient;
 }
 
 // This is the type fed into the keeper handlers. If you need more data from

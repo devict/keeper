@@ -1,13 +1,11 @@
-import { CommandClient, Command } from '../../types/generic';
+import { CommandClient, Command, Client } from '../../types/generic';
 import { KeeperClientOptions, KeeperSlackMiddleware } from '../../types/clients/keeper'
 import KeeperCommandHandlerMap from '../handlers/keeper';
-import SlackClient from './slack';
-import PhonyClient from './phony';
 import { Logger } from '../../types/logger';
 
-class KeeperClient implements CommandClient<KeeperClient> {
+class KeeperClient implements CommandClient {
     private logger: Logger;
-    private slackClient: CommandClient<SlackClient | PhonyClient>;
+    private slackClient: CommandClient;
     private slackCommandHandlers: Command<KeeperSlackMiddleware, this>[];
 
     constructor(options: KeeperClientOptions) {
