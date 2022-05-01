@@ -43,7 +43,7 @@ class SlackClient implements CommandClient<SlackClient> {
                     case "string": return matches == args.message;
                 }
             }).map(({ handler }) => {
-                return handler({ client: this, command: args, logger: this.logger.log })
+                return handler({ client: this, command: args, logger: this.logger })
             }));
         });
         this._client.error((error: Error) => {

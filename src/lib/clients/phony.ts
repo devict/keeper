@@ -35,7 +35,7 @@ export default class PhonyClient implements CommandClient<PhonyClient> {
     handlerArgs(c: net.Socket, text: string): HandlerBody<KeeperSlackMiddleware, this> {
         return {
             client: this,
-            logger: this.logger.log,
+            logger: this.logger,
             command: {
                 say: async (args: string | SayArguments) => {
                     const text = typeof args === "string" ? args : args.text;

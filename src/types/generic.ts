@@ -14,7 +14,7 @@ export interface BaseOptions {
 
 export interface Client extends Startable, Stoppable { };
 
-export type HandlerBody<Command = any, Client = any> = { command: Command, client: Client, logger: Function }
+export type HandlerBody<Command = any, Client = any> = { command: Command, client: Client, logger: Logger }
 
 export type Handler<Command = any, Client = any> = (args: HandlerBody<Command, Client>) => Promise<void>;
 
