@@ -6,7 +6,7 @@ import { Logger } from '../../types/logger'
 import * as net from 'net';
 import { promisify } from 'util';
 
-export default class PhonyClient implements CommandClient {
+export default class PhonySlackClient implements CommandClient {
     private logger: Logger;
     private server: net.Server;
     private commands: Command<KeeperSlackMiddleware, this>[];
@@ -62,8 +62,8 @@ export default class PhonyClient implements CommandClient {
         this.logger.log(`${this.constructor.name}.stop():SUCCESS`)
     }
 
-    registerCommand({ matches, handler }: Command): PhonyClient {
-        this.commands.push({ matches, handler });
+    registerCommand(command: Command): PhonySlackClient {
+        this.commands.push(command);
         return this;
     }
 }
