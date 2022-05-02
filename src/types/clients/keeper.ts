@@ -1,13 +1,19 @@
-import { AllMiddlewareArgs, SlackViewMiddlewareArgs } from "@slack/bolt";
-import SlackClient from "../../lib/clients/slack";
-import { BaseOptions } from "../generic";
-
-export const KeeperSlackCommands = {
-    PING: '/ping'
-}
+import { SlackEventMiddlewareArgs } from "@slack/bolt";
+import { BaseOptions, CommandClient } from "../generic";
 
 export interface KeeperClientOptions extends BaseOptions {
-    slackClient: SlackClient;
+    slackClient: CommandClient;
 }
 
-export type KeeperSlackMiddleware = SlackViewMiddlewareArgs & AllMiddlewareArgs;
+// This is the type fed into the keeper handlers. If you need more data from
+// the Slack client, you can add those properties here, and will need to account for
+// them in the PhonySlackClient as well.
+export type AppMentionEvent = {
+    say: SlackEventMiddlewareArgs<'app_mention'>['say'],
+    payload: Pick<
+        SlackEventMiddlewareArgs<'app_mention'>['payload'],
+        'channel' | 'username' | 'text'
+    >
+};
+
+export type KeeperSlackMiddleware = AppMentionEvent;

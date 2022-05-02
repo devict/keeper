@@ -1,13 +1,12 @@
-import { CommandClient, Handler } from "../../types/generic";
+import { CommandClient, Command, Client } from '../../types/generic';
 import { KeeperClientOptions, KeeperSlackMiddleware } from '../../types/clients/keeper'
-import SlackClient from "./slack";
-import KeeperCommandHandlerMap from "../handlers/keeper";
-import { Logger } from "../../types/logger";
+import KeeperCommandHandlerMap from '../handlers/keeper';
+import { Logger } from '../../types/logger';
 
-class KeeperClient implements CommandClient<KeeperClient> {
+class KeeperClient implements CommandClient {
     private logger: Logger;
-    private slackClient: SlackClient;
-    private slackCommandHandlers: { [command: string]: Handler<KeeperSlackMiddleware> }
+    private slackClient: CommandClient;
+    private slackCommandHandlers: Command<KeeperSlackMiddleware, this>[];
 
     constructor(options: KeeperClientOptions) {
         this.logger = options.logger;
@@ -15,29 +14,24 @@ class KeeperClient implements CommandClient<KeeperClient> {
         this.slackCommandHandlers = KeeperCommandHandlerMap;
     }
 
-    start = (): Promise<void> => {
-        return this.slackClient
-            .start()
-            .then(this.addDefaultCommandHandlers)
-            .then(() => {
-                this.logger.log(`Started ${this.constructor.name}#start():SUCCESS`)
-            })
+    start = async (): Promise<void> => {
+        await this.slackClient.start();
+        this.addDefaultCommandHandlers();
+        this.logger.log(`Started ${this.constructor.name}#start():SUCCESS`);
     }
 
-    stop = (): Promise<void> => {
-        return this.slackClient.stop();
+    stop = async (): Promise<void> => {
+        await this.slackClient.stop();
     }
 
-    registerCommand(command: string, handler: Handler<any>): KeeperClient {
-        this.slackCommandHandlers[command] = handler;
-        this.slackClient.registerCommand(command, handler);
-
+    registerCommand(command: Command): KeeperClient {
+        this.slackCommandHandlers.push(command);
         return this;
     }
 
     private addDefaultCommandHandlers = () => {
-        Object.keys(this.slackCommandHandlers).forEach(command => {
-            this.slackClient.registerCommand(command, this.slackCommandHandlers[command]);
+        this.slackCommandHandlers.forEach(command => {
+            this.slackClient.registerCommand(command);
         });
     }
 }

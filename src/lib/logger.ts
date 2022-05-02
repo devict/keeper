@@ -17,7 +17,7 @@ class Logger implements LoggerInterface {
     }
 
     log(message: string | object, level?: LogLevel): void {
-        return this._client[level || LogLevel.TRACE](message);
+        return this._client[level || LogLevel.INFO](message);
     }
 
     error(message: string): void {

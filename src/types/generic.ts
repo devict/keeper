@@ -14,10 +14,15 @@ export interface BaseOptions {
 
 export interface Client extends Startable, Stoppable { };
 
-export type HandlerBody<Command = any, Client = any> = { command: Command, client: Client, logger: Function }
+export type HandlerBody<Command = any, Client = any> = { command: Command, client: Client, logger: Logger }
 
 export type Handler<Command = any, Client = any> = (args: HandlerBody<Command, Client>) => Promise<void>;
 
-export interface CommandClient<T> extends Client {
-    registerCommand(command: string, handler: Handler): T;
+export interface Command<Command = any, Client = any> {
+    matches: string | RegExp;
+    handler: Handler<Command, Client>;
+}
+
+export interface CommandClient extends Client {
+    registerCommand(command: Command): CommandClient;
 };

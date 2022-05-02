@@ -1,7 +1,6 @@
 # Keeper
 
-
-
+The [devICT](https://devict.org) community Slack bot!
 
 ### Development
 
@@ -19,7 +18,14 @@ Keeper be be ran from both your local CLI, as well as in Docker.
 
 Now you can add commands to Keeper in `lib/handlers/keeper.ts`!
 
+#### Interacting with the bot locally
+
+1. Make sure it's running with `npm start` in one terminal
+2. In another terminal, run `nc localhost 3333` to open a tcp connection to the bot
+3. Type commands and see responses! Try `hello` and you should see `keeper: hello, Human!` in response
+
 #### Docker
+
 **NOTE** As of now, there is no way to develop locally in docker.
 
 To run your local build, run `make build`, then `make start`.
