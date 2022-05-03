@@ -13,7 +13,6 @@ class SlackClient implements CommandClient {
         this._client = new App({
             signingSecret: options.signingSecret,
             token: options.token,
-            socketMode: true,
             appToken: options.appToken
         });
         this.commands = [];
@@ -22,8 +21,9 @@ class SlackClient implements CommandClient {
     }
 
     async start(): Promise<void> {
-        await this._client.start(this.port);
+        await this._client.start({ port: this.port, host: '0.0.0.0' });
         this.attachDefaultHandler;
+        this.logger.log(`Started SlackClient#start(): listening on port ${this.port}`);
     }
 
     async stop(): Promise<void> {
