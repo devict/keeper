@@ -15,7 +15,7 @@ export type MessageEvent = {
     matches?: AllMiddlewareArgs['context']['matches'],
     message: {
         channel: GenericMessageEvent['channel'],
-        username?: BotMessageEvent['username'],
+        user?: BotMessageEvent['user'],
         text?: GenericMessageEvent['text'],
     },
 };

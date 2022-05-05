@@ -45,7 +45,7 @@ export default class PhonySlackClient implements CommandClient {
                 },
                 message: {
                     channel: "#local",
-                    username: "Human",
+                    user: "Human",
                     text,
                 },
             },
