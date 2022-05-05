@@ -1,4 +1,4 @@
-import { CommandClient, Command, Client } from '../../types/generic';
+import { CommandClient, Command } from '../../types/generic';
 import { KeeperClientOptions, KeeperSlackMiddleware } from '../../types/clients/keeper'
 import KeeperCommandHandlerMap from '../handlers/keeper';
 import { Logger } from '../../types/logger';
@@ -15,8 +15,8 @@ class KeeperClient implements CommandClient {
     }
 
     start = async (): Promise<void> => {
-        await this.slackClient.start();
         this.addDefaultCommandHandlers();
+        await this.slackClient.start();
         this.logger.log(`Started ${this.constructor.name}#start():SUCCESS`);
     }
 

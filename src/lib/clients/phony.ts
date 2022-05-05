@@ -43,7 +43,7 @@ export default class PhonySlackClient implements CommandClient {
                     c.write(`keeper: ${text}\n`);
                     return { ok: true };
                 },
-                payload: {
+                message: {
                     channel: "#local",
                     username: "Human",
                     text,

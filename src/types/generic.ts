@@ -1,3 +1,4 @@
+import { KeeperSlackMiddleware } from './clients/keeper';
 import { Logger } from "./logger";
 
 export interface Startable {
@@ -18,7 +19,7 @@ export type HandlerBody<Command = any, Client = any> = { command: Command, clien
 
 export type Handler<Command = any, Client = any> = (args: HandlerBody<Command, Client>) => Promise<void>;
 
-export interface Command<Command = any, Client = any> {
+export interface Command<Command = KeeperSlackMiddleware, Client = any> {
     matches: string | RegExp;
     handler: Handler<Command, Client>;
 }

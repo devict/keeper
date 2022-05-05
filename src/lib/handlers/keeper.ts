@@ -8,17 +8,17 @@ export const sayPong = async (args: HandlerBody<KeeperSlackMiddleware, KeeperCli
 }
 
 export const sayHello = async (args: HandlerBody<KeeperSlackMiddleware, KeeperClient>): Promise<void> => {
-    const { command: { say, payload: { username } } } = args;
+    const { command: { say, message: { username } } } = args;
     await say(`hello, ${username}!`);
 }
 
 export default [
     {
-        matches: "ping",
+        matches: /ping/,
         handler: sayPong,
     },
     {
-        matches: /^hello/,
+        matches: /hello/,
         handler: sayHello,
     },
 ]
