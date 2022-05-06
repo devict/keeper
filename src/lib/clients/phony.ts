@@ -26,7 +26,10 @@ export default class PhonySlackClient implements CommandClient {
                         case "object": return matches.test(msg);
                         case "string": return matches == msg;
                     }
-                }).map(({ handler }) => {
+                }).map(({ requireMention, handler }) => {
+                    if (requireMention && msg.indexOf('@keeper') === -1) {
+                        return;
+                    }
                     return handler(this.handlerArgs(c, msg))
                 }));
             });

@@ -30,21 +30,25 @@ class SlackClient implements CommandClient {
         await this._client.stop()
     }
 
-    registerCommand({ matches, handler }: Command): SlackClient {
-        this.commands.push({ matches, handler });
+    registerCommand(command: Command): SlackClient {
+        this.commands.push(command);
         return this;
     }
 
     private attachDefaultHandler = () => {
-        this.commands.forEach(({ matches, handler }) => {
+        this.commands.forEach(({ requireMention, matches, handler }) => {
             this.logger.log(`attaching handler for: ${matches}`);
             this._client.message(matches, async (args) => {
+                if (requireMention && !args.message.subtype && args.message.text?.indexOf('<@U03BJBGCGNQ>') === -1) {
+                    return;
+                }
                 this.logger.log(`message received! ${JSON.stringify(args)}`);
                 await handler({ client: this, logger: this.logger, command: args });
             });
         });
         this._client.error(async (error: Error) => this.logger.error(error));
     }
+
 }
 
 export default SlackClient;

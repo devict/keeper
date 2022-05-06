@@ -17,9 +17,10 @@ export interface Client extends Startable, Stoppable { };
 
 export type HandlerBody<Command = any, Client = any> = { command: Command, client: Client, logger: Logger }
 
-export type Handler<Command = any, Client = any> = (args: HandlerBody<Command, Client>) => Promise<void>;
+export type Handler<Command = MessageEvent, Client = any> = (args: HandlerBody<Command, Client>) => Promise<void>;
 
 export interface Command<Command = MessageEvent, Client = any> {
+    requireMention: boolean;
     matches: string | RegExp;
     handler: Handler<Command, Client>;
 }
