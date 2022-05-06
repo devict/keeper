@@ -19,5 +19,3 @@ export type MessageEvent = {
         text?: GenericMessageEvent['text'],
     },
 };
-
-export type KeeperSlackMiddleware = MessageEvent;

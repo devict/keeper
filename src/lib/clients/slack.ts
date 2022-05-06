@@ -36,22 +36,10 @@ class SlackClient implements CommandClient {
     }
 
     private attachDefaultHandler = () => {
-        // TODO: replace this with this._client.message() usage
-        // - https://slack.dev/bolt-js/concepts#message-listening
-        // this._client.event("app_mention", async (args) => {
-        //     await Promise.all(this.commands.filter(({ matches }) => {
-        //         switch (typeof matches) {
-        //             case "object": return matches.test(args.message);
-        //             case "string": return matches == args.message;
-        //         }
-        //     }).map(({ handler }) => {
-        //         return handler({ client: this, command: args, logger: this.logger })
-        //     }));
-        // });
         this.commands.forEach(({ matches, handler }) => {
             this.logger.log(`attaching handler for: ${matches}`);
             this._client.message(matches, async (args) => {
-                this.logger.log(`message received! ${args}`);
+                this.logger.log(`message received! ${JSON.stringify(args)}`);
                 await handler({ client: this, logger: this.logger, command: args });
             });
         });

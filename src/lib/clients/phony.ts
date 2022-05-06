@@ -1,6 +1,6 @@
 import { BaseOptions, HandlerBody } from '../../types/generic';
 import { SayArguments } from "@slack/bolt";
-import { KeeperSlackMiddleware } from "../../types/clients/keeper"
+import { MessageEvent } from "../../types/clients/keeper"
 import { CommandClient, Command } from '../../types/generic';
 import { Logger } from '../../types/logger'
 import * as net from 'net';
@@ -9,7 +9,7 @@ import { promisify } from 'util';
 export default class PhonySlackClient implements CommandClient {
     private logger: Logger;
     private server: net.Server;
-    private commands: Command<KeeperSlackMiddleware, this>[];
+    private commands: Command<MessageEvent, this>[];
 
     constructor(options: BaseOptions) {
         this.commands = [];
@@ -33,7 +33,7 @@ export default class PhonySlackClient implements CommandClient {
         });
     }
 
-    handlerArgs(c: net.Socket, text: string): HandlerBody<KeeperSlackMiddleware, this> {
+    handlerArgs(c: net.Socket, text: string): HandlerBody<MessageEvent, this> {
         return {
             client: this,
             logger: this.logger,
