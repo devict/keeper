@@ -39,7 +39,7 @@ class SlackClient implements CommandClient {
         this.commands.forEach(({ requireMention, matches, handler }) => {
             this.logger.log(`attaching handler for: ${matches}`);
             this._client.message(matches, async (args) => {
-                if (requireMention && !args.message.subtype && args.message.text?.indexOf('<@U03BJBGCGNQ>') === -1) {
+                if (requireMention && !args.message.subtype && args.message.text?.indexOf(`<@${args.context.botUserId}>`) === -1) {
                     return;
                 }
                 this.logger.log(`message received! ${JSON.stringify(args)}`);
