@@ -46,7 +46,7 @@ class SlackClient implements CommandClient {
                 await handler({ client: this, logger: this.logger, command: args });
             });
         });
-        this._client.error(async (error: Error) => this.logger.error(error));
+        this._client.error(this.logger.error);
     }
 
 }
