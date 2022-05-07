@@ -12,24 +12,18 @@ Keeper be be ran from both your local CLI, as well as in Docker.
 
 1. Run `make build-dev-workspace`
 2. Populate the data in the newly generated `.env` file
-3. You'll need 2 terminals to compile live.
-    1. In one terminal, just run `npm start`
-    2. In your other terminal, run `make dev`, which will compile your `.ts` files live
+3. Run `make dev`, which will start docker compose with two services
+  1. The `build` service watches and recompiles typescript on file change
+  2. The `app` service watches for newly compiled source and restarts the app
 
 Now you can add commands to Keeper in `lib/handlers/keeper.ts`!
 
 #### Interacting with the bot locally
 
-1. Make sure it's running with `npm start` in one terminal
-2. In another terminal, run `nc localhost 3333` to open a tcp connection to the bot
+1. Make sure it's running with `make dev` in one terminal
+2. In another terminal, run `make test-local` to open a tcp connection to the bot
 3. Type commands and see responses! Try `hello` and you should see `keeper: hello, Human!` in response
-
-#### Docker
-
-**NOTE** As of now, there is no way to develop locally in docker.
-
-To run your local build, run `make build`, then `make start`.
-Run `make stop` to kill the container.
+4. For commands that require a bot mention, use `@keeper` in your message
 
 ### Add your first Keeper command!
 

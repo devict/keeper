@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+    working_dir: /app
+    environment:
+      PORT: 3333
+      SLACK_SIGNING_SECRET: asdf
+      SLACK_BOT_TOKEN: asdf
+      SLACK_APP_TOKEN: asdf
+      CONF_FILE: local
+    volumes:
+      - .:/app
+    ports:
+      - 3333:3333
+    command: ['./node_modules/.bin/nodemon', '-w', './dist', './dist/bin/service.js']
+
+  build:
+    image: node:18-buster-slim
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: ['./node_modules/.bin/tsc', '-w']

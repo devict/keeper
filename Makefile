@@ -1,6 +1,8 @@
+.PHONY: build
 build:
 	@docker build -t devict/keeper .
 
+.PHONY: build-dev-workspace
 build-dev-workspace:
 	@cp .env.default .env
 	@$(MAKE) compile
@@ -9,9 +11,19 @@ build-dev-workspace:
 .PHONY: compile
 compile:
 	@npm run build
+
+.PHONY: dev
 dev:
-	@./node_modules/.bin/tsc -w 
+	@docker-compose up
+
+.PHONY: test-local
+test-local:
+	@nc localhost 3333
+
+.PHONY: start
 start:
 	@docker run --name keeper -d devict/keeper
+
+.PHONY: stop
 stop:
 	@docker rm -f keeper
