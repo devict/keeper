@@ -1,27 +1,21 @@
-import { MessageEvent } from "../../types/clients/keeper"
-import { Handler } from "../../types/generic";
-import KeeperClient from "../clients/keeper"
+import { Command } from "../../types/generic";
 
-type CommandHandler = Handler<MessageEvent, KeeperClient>;
-
-export const sayPong: CommandHandler = async ({ logger, command: { say, message } }) => {
-    logger.log(`got ping: ${JSON.stringify(message.text)}`);
-    await say(`Pong! -- ${message.text}`);
-}
-
-export const sayHello: CommandHandler = async ({ command: { say, message } }) => {
-    await say(`hello, <@${message.user}>!`);
-}
-
-export default [
+const commands: Command[] = [
     {
         requireMention: true,
         matches: /ping/,
-        handler: sayPong,
+        handler: async ({ logger, command: { say, message } }) => {
+            logger.log(`got ping: ${JSON.stringify(message.text)}`);
+            await say(`pong! -- ${message.text}`);
+        },
     },
     {
         requireMention: false,
         matches: /hello/,
-        handler: sayHello,
+        handler: async ({ command: { say, message } }) => {
+            await say(`hello, <@${message.user}>!`);
+        },
     },
-]
+];
+
+export default commands;
