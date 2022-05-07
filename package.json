@@ -8,9 +8,13 @@
     "test": "test"
   },
   "scripts": {
-    "start": "DOTENV_CONFIG_PATH=./.env nodemon ./dist/bin/service.js",
+    "start": "DOTENV_CONFIG_PATH=./.env nodemon -w ./dist ./dist/bin/service.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "./node_modules/.bin/tsc --project ./tsconfig.json"
+    "build": "./node_modules/.bin/tsc --project ./tsconfig.json",
+    "watch": "./node_modules/.bin/tsc -w --project ./tsconfig.json",
+    "dev": "docker-compose up",
+    "build-dev-workspace": "cp .env.default .env && npm ci && npm run build",
+    "test-local": "nc localhost 3333"
   },
   "author": "Kaleb Mills",
   "contributors": [
