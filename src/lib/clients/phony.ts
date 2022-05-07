@@ -1,6 +1,6 @@
 import { BaseOptions, HandlerBody } from '../../types/generic';
 import { SayArguments } from "@slack/bolt";
-import { KeeperSlackMiddleware } from "../../types/clients/keeper"
+import { MessageEvent } from "../../types/clients/keeper"
 import { CommandClient, Command } from '../../types/generic';
 import { Logger } from '../../types/logger'
 import * as net from 'net';
@@ -9,7 +9,7 @@ import { promisify } from 'util';
 export default class PhonySlackClient implements CommandClient {
     private logger: Logger;
     private server: net.Server;
-    private commands: Command<KeeperSlackMiddleware, this>[];
+    private commands: Command<MessageEvent, this>[];
 
     constructor(options: BaseOptions) {
         this.commands = [];
@@ -26,14 +26,17 @@ export default class PhonySlackClient implements CommandClient {
                         case "object": return matches.test(msg);
                         case "string": return matches == msg;
                     }
-                }).map(({ handler }) => {
+                }).map(({ requireMention, handler }) => {
+                    if (requireMention && msg.indexOf('@keeper') === -1) {
+                        return;
+                    }
                     return handler(this.handlerArgs(c, msg))
                 }));
             });
         });
     }
 
-    handlerArgs(c: net.Socket, text: string): HandlerBody<KeeperSlackMiddleware, this> {
+    handlerArgs(c: net.Socket, text: string): HandlerBody<MessageEvent, this> {
         return {
             client: this,
             logger: this.logger,
@@ -43,9 +46,9 @@ export default class PhonySlackClient implements CommandClient {
                     c.write(`keeper: ${text}\n`);
                     return { ok: true };
                 },
-                payload: {
+                message: {
                     channel: "#local",
-                    username: "Human",
+                    user: "Human",
                     text,
                 },
             },

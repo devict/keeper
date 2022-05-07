@@ -13,7 +13,6 @@ class SlackClient implements CommandClient {
         this._client = new App({
             signingSecret: options.signingSecret,
             token: options.token,
-            socketMode: true,
             appToken: options.appToken
         });
         this.commands = [];
@@ -22,35 +21,34 @@ class SlackClient implements CommandClient {
     }
 
     async start(): Promise<void> {
-        await this._client.start(this.port);
-        this.attachDefaultHandler;
+        await this._client.start({ port: this.port, host: '0.0.0.0' });
+        this.attachDefaultHandler();
+        this.logger.log(`Started SlackClient#start(): listening on port ${this.port}`);
     }
 
     async stop(): Promise<void> {
         await this._client.stop()
     }
 
-    registerCommand({ matches, handler }: Command): SlackClient {
-        this.commands.push({ matches, handler });
+    registerCommand(command: Command): SlackClient {
+        this.commands.push(command);
         return this;
     }
 
     private attachDefaultHandler = () => {
-        this._client.event("app_mention", async (args) => {
-            await Promise.all(this.commands.filter(({ matches }) => {
-                switch (typeof matches) {
-                    case "object": return matches.test(args.message);
-                    case "string": return matches == args.message;
+        this.commands.forEach(({ requireMention, matches, handler }) => {
+            this.logger.log(`attaching handler for: ${matches}`);
+            this._client.message(matches, async (args) => {
+                if (requireMention && !args.message.subtype && args.message.text?.indexOf(`<@${args.context.botUserId}>`) === -1) {
+                    return;
                 }
-            }).map(({ handler }) => {
-                return handler({ client: this, command: args, logger: this.logger })
-            }));
+                this.logger.log(`message received! ${JSON.stringify(args)}`);
+                await handler({ client: this, logger: this.logger, command: args });
+            });
         });
-        this._client.error((error: Error) => {
-            this.logger.error(error)
-            return Promise.resolve();
-        })
+        this._client.error(this.logger.error);
     }
+
 }
 
 export default SlackClient;

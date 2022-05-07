@@ -1,24 +1,27 @@
-import { KeeperSlackMiddleware } from "../../types/clients/keeper"
-import { HandlerBody } from "../../types/generic";
+import { MessageEvent } from "../../types/clients/keeper"
+import { Handler } from "../../types/generic";
 import KeeperClient from "../clients/keeper"
 
-export const sayPong = async (args: HandlerBody<KeeperSlackMiddleware, KeeperClient>): Promise<void> => {
-    const { command: { say } } = args;
-    await say('Pong!');
+type CommandHandler = Handler<MessageEvent, KeeperClient>;
+
+export const sayPong: CommandHandler = async ({ logger, command: { say, message } }) => {
+    logger.log(`got ping: ${JSON.stringify(message.text)}`);
+    await say(`Pong! -- ${message.text}`);
 }
 
-export const sayHello = async (args: HandlerBody<KeeperSlackMiddleware, KeeperClient>): Promise<void> => {
-    const { command: { say, payload: { username } } } = args;
-    await say(`hello, ${username}!`);
+export const sayHello: CommandHandler = async ({ command: { say, message } }) => {
+    await say(`hello, <@${message.user}>!`);
 }
 
 export default [
     {
-        matches: "ping",
+        requireMention: true,
+        matches: /ping/,
         handler: sayPong,
     },
     {
-        matches: /^hello/,
+        requireMention: false,
+        matches: /hello/,
         handler: sayHello,
     },
 ]
