@@ -3,6 +3,8 @@ import pingWorkflow from "./workflows/ping.ts";
 import { GitHubIssuesFunctionDefinition } from "./functions/github_issues.ts";
 import { IssuesWorkflow } from "./workflows/issues.ts";
 
+import "std/dotenv/load.ts";
+
 /**
  * The app manifest contains the app's configuration. This
  * file defines attributes like app name and description.

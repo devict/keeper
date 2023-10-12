@@ -7,14 +7,14 @@ const REPOS = [
   "devict/hacktoberfest",
 ]
 
-export async function getHelpWantedIssues() {
+export async function getHelpWantedIssues(token: string) {
 /**
  * TODO: Assuming there won't be more than 100 help-wanted issues on
  * any of the defined repos. Handle pagination!
  */
   const PER_PAGE = 100;
   const allRepoIssues = await Promise.all(
-    REPOS.map(r => fetchIssues(r, PER_PAGE, 1))
+    REPOS.map(r => fetchIssues(token, r, PER_PAGE, 1))
   );
   return allRepoIssues.flat();
 }
@@ -45,11 +45,11 @@ type GitHubIssue = z.infer<typeof GitHubIssueSchema>;
 
 const GitHubIssueResponseSchema = z.array(GitHubIssueSchema);
 
-async function fetchIssues(repo: string, perPage: number, page: number = 1) {
+async function fetchIssues(token: string, repo: string, perPage: number, page: number = 1) {
   const url = `https://api.github.com/repos/${repo}/issues?state=open&labels=devict-help-wanted&per_page=${perPage}&page=${page}`;
   const resp = await fetch(url, {
     headers: {
-      "Authorization": `Bearer ${Deno.env.get("GITHUB_TOKEN")}`,
+      "Authorization": `Bearer ${token}`,
       "X-GitHub-Api-Version": "2022-11-28",
     }
   });

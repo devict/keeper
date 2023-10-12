@@ -1,4 +1,4 @@
-import { filterKeys } from "collections/filter_keys.ts";
+import { filterKeys } from "std/collections/filter_keys.ts";
 
 export const Channels = {
   "#general": "C02TAGHRE",

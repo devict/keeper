@@ -23,8 +23,8 @@ export const GitHubIssuesFunctionDefinition = DefineFunction({
 
 export default SlackFunction(
   GitHubIssuesFunctionDefinition,
-  async () => {
-    const issues = await getHelpWantedIssues();
+  async ({ env }) => {
+    const issues = await getHelpWantedIssues(env.GITHUB_TOKEN);
     return { outputs: { message: formatIssuesAsMessage(issues) } };
   },
 );
