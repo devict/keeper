@@ -2,6 +2,7 @@
   "imports": {
     "deno-slack-sdk/": "https://deno.land/x/deno_slack_sdk@2.4.0/",
     "deno-slack-api/": "https://deno.land/x/deno_slack_api@2.1.2/",
-    "collections/": "https://deno.land/std@0.203.0/collections/"
+    "collections/": "https://deno.land/std@0.203.0/collections/",
+    "zod": "https://deno.land/x/zod@v3.22.4/mod.ts"
   }
 }

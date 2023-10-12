@@ -1,0 +1,11 @@
+{
+  "apps": {
+    "T02TAGHQQ": {
+      "app_id": "A060LNBEKMX",
+      "IsDev": false,
+      "team_domain": "devict",
+      "team_id": "T02TAGHQQ"
+    }
+  },
+  "default": "devict"
+}

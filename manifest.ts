@@ -1,5 +1,7 @@
 import { Manifest } from "deno-slack-sdk/mod.ts";
 import pingWorkflow from "./workflows/ping.ts";
+import { GitHubIssuesFunctionDefinition } from "./functions/github_issues.ts";
+import { IssuesWorkflow } from "./workflows/issues.ts";
 
 /**
  * The app manifest contains the app's configuration. This
@@ -11,10 +13,10 @@ export default Manifest({
   displayName: "keeper",
   description: "A slack bot for devICT",
   icon: "assets/devict_logo_2000x2000.png",
-  functions: [],
-  workflows: [pingWorkflow],
+  functions: [GitHubIssuesFunctionDefinition],
+  workflows: [pingWorkflow, IssuesWorkflow],
   events: [],
-  outgoingDomains: [],
+  outgoingDomains: ["api.github.com"],
   botScopes: [
     "commands",
     "chat:write",
