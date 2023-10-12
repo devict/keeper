@@ -5,8 +5,8 @@ import { AllRegisteredChannels } from "../lib/channels.ts";
 
 const pingTrigger: Trigger<typeof pingWorkflow.definition> = {
   type: TriggerTypes.Event,
-  name: "Reactji response",
-  description: "responds to a specific reactji",
+  name: "Ping response",
+  description: "responds to @keeper ping",
   workflow: "#/workflows/ping",
   event: {
     event_type: TriggerEventTypes.AppMentioned,
@@ -27,7 +27,7 @@ const pingTrigger: Trigger<typeof pingWorkflow.definition> = {
       value: "{{data.user_id}}",
     },
     channel_id: {
-      value: "C123ABC456",
+      value: "{{data.channel_id}}",
     },
   },
 };

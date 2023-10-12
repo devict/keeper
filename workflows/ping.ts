@@ -6,7 +6,7 @@ const pingWorkflow = DefineWorkflow({
   title: "Ping",
   input_parameters: {
     properties: {
-      channel_id: { type: Schema.types.string },
+      channel_id: { type: Schema.slack.types.channel_id },
       user_id: { type: Schema.slack.types.user_id },
     },
     required: ["channel_id", "user_id"],
