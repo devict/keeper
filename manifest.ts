@@ -1,5 +1,5 @@
 import { Manifest } from "deno-slack-sdk/mod.ts";
-import pingWorkflow from "./workflows/ping.ts";
+import PingWorkflow from "./workflows/ping.ts";
 import { GitHubIssuesFunctionDefinition } from "./functions/github_issues.ts";
 import { IssuesWorkflow } from "./workflows/issues.ts";
 
@@ -16,7 +16,7 @@ export default Manifest({
   description: "A slack bot for devICT",
   icon: "assets/devict_logo_2000x2000.png",
   functions: [GitHubIssuesFunctionDefinition],
-  workflows: [pingWorkflow, IssuesWorkflow],
+  workflows: [PingWorkflow, IssuesWorkflow],
   events: [],
   outgoingDomains: [
     "api.github.com",

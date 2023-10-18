@@ -1,9 +1,9 @@
 import { Trigger } from "deno-slack-api/types.ts";
 import { TriggerEventTypes, TriggerTypes } from "deno-slack-api/mod.ts";
-import pingWorkflow from "../workflows/ping.ts";
+import PingWorkflow from "../workflows/ping.ts";
 import { AllRegisteredChannels } from "../lib/channels.ts";
 
-const pingTrigger: Trigger<typeof pingWorkflow.definition> = {
+const pingTrigger: Trigger<typeof PingWorkflow.definition> = {
   type: TriggerTypes.Event,
   name: "Ping response",
   description: "responds to @keeper ping",
