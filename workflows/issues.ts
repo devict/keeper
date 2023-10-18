@@ -7,9 +7,10 @@ export const IssuesWorkflow = DefineWorkflow({
   title: "GitHub Help Wanted Issues",
   input_parameters: {
     properties: {
+      message_ts: { type: Schema.slack.types.message_ts },
       channel_id: { type: Schema.slack.types.channel_id },
     },
-    required: ["channel_id"],
+    required: ["message_ts"],
   },
 });
 
@@ -19,9 +20,12 @@ const getIssuesMessageStep = IssuesWorkflow.addStep(
 );
 
 IssuesWorkflow.addStep(
-  Schema.slack.functions.SendMessage,
+  Schema.slack.functions.ReplyInThread,
   {
-    channel_id: IssuesWorkflow.inputs.channel_id,
-    message: `${getIssuesMessageStep.outputs.message}}`,
+    message_context: {
+      message_ts: IssuesWorkflow.inputs.message_ts,
+      channel_id: IssuesWorkflow.inputs.channel_id,
+    },
+    message: `${getIssuesMessageStep.outputs.message}`,
   },
 );

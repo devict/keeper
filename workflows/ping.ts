@@ -1,7 +1,7 @@
 import { DefineWorkflow, Schema } from "deno-slack-sdk/mod.ts";
 
 // Define a workflow that can pass the parameters for the Slack function
-const pingWorkflow = DefineWorkflow({
+const PingWorkflow = DefineWorkflow({
   callback_id: "ping",
   title: "Ping",
   input_parameters: {
@@ -13,12 +13,12 @@ const pingWorkflow = DefineWorkflow({
   },
 });
 
-pingWorkflow.addStep(
+PingWorkflow.addStep(
   Schema.slack.functions.SendMessage,
   {
-    channel_id: pingWorkflow.inputs.channel_id,
-    message: `<@${pingWorkflow.inputs.user_id}> pong!`,
+    channel_id: PingWorkflow.inputs.channel_id,
+    message: `<@${PingWorkflow.inputs.user_id}> pong!`,
   },
 );
 
-export default pingWorkflow;
+export default PingWorkflow;

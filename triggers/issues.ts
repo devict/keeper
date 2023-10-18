@@ -1,5 +1,9 @@
 import { Trigger } from "deno-slack-api/types.ts";
-import { TriggerEventTypes, TriggerTypes } from "deno-slack-api/mod.ts";
+import {
+  TriggerContextData,
+  TriggerEventTypes,
+  TriggerTypes,
+} from "deno-slack-api/mod.ts";
 import { AllRegisteredChannels } from "../lib/channels.ts";
 import { IssuesWorkflow } from "../workflows/issues.ts";
 
@@ -7,7 +11,6 @@ const IssuesTrigger: Trigger<typeof IssuesWorkflow.definition> = {
   type: TriggerTypes.Event,
   name: "Fetch help wanted GitHub issues.",
   description: "responds to `@keeper issues`",
-  workflow: "#/workflows/issues",
   event: {
     event_type: TriggerEventTypes.AppMentioned,
     /**
@@ -22,9 +25,13 @@ const IssuesTrigger: Trigger<typeof IssuesWorkflow.definition> = {
       },
     },
   },
+  workflow: "#/workflows/issues",
   inputs: {
+    message_ts: {
+      value: TriggerContextData.Event.AppMentioned.message_ts,
+    },
     channel_id: {
-      value: "{{data.channel_id}}",
+      value: TriggerContextData.Event.AppMentioned.channel_id,
     },
   },
 };
