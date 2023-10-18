@@ -18,7 +18,9 @@ export default Manifest({
   functions: [GitHubIssuesFunctionDefinition],
   workflows: [pingWorkflow, IssuesWorkflow],
   events: [],
-  outgoingDomains: ["api.github.com"],
+  outgoingDomains: [
+    "api.github.com",
+  ],
   botScopes: [
     "commands",
     "chat:write",

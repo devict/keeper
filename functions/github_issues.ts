@@ -24,7 +24,15 @@ export const GitHubIssuesFunctionDefinition = DefineFunction({
 export default SlackFunction(
   GitHubIssuesFunctionDefinition,
   async ({ env }) => {
-    const issues = await getHelpWantedIssues(env.GITHUB_TOKEN);
-    return { outputs: { message: formatIssuesAsMessage(issues) } };
+    try {
+      const issues = await getHelpWantedIssues(env.GITHUB_TOKEN);
+      return { outputs: { message: formatIssuesAsMessage(issues) } };
+    } catch (e: unknown) {
+      return {
+        error: `Failed to fetch github issues: ${
+          e instanceof Error ? e.message : "unknown error"
+        }`,
+      };
+    }
   },
 );

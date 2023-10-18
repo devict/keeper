@@ -5,6 +5,7 @@ const REPOS = [
   "devict/devict.org",
   "devict/keeper",
   "devict/hacktoberfest",
+  "devict/help",
 ]
 
 export async function getHelpWantedIssues(token: string) {
